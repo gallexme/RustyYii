@@ -7,3 +7,4 @@ authors = ["HeadScript <lostchaos3@gmail.com>"]
 version = "*"
 [dependencies]
 hyper = "*"
+staticfile = "*"

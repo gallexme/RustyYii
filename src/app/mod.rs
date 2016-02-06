@@ -1,39 +1,66 @@
-use std::thread::{JoinHandle, spawn, sleep};
-use std::time;
-use iron::prelude::*;
 
-pub use iron::error::HttpResult;
-pub use hyper::server::Listening;
 
 pub mod router;
-pub struct App {
-    listener: Listening, // Nur das was drin ist
-}
-fn iron_spawner() -> Listening {
-    let mut router = router::Router::new();
-    router.add_route("".to_string(),
-                     |_: &mut Request| Ok(Response::with("Hello world !")));
-    router.add_route("hello".to_string(),
-                     |_: &mut Request| Ok(Response::with("Hello world !")));
-    let host = "localhost:80";
-    println!("Starting HTTP server on http://{}...", host);
-    Iron::new(router).http(host).unwrap()
+pub mod controller;
+pub mod app;
+pub mod app_config;
 
-}
-impl App {
-    pub fn run() -> App {
+// RustyYii Konfiguration
+// use std::thread::{JoinHandle, spawn, sleep};
+// use std::time;
+// use iron::prelude::*;
+//
+//
+// pub use iron::error::HttpResult;
+// pub use hyper::server::Listening;
 
 
-        App { listener: iron_spawner() }
-    }
-}
 #[cfg(test)]
 mod app_tests {
     use super::*;
+
+    use iron::prelude::*;
+    use iron::status;
+    use hyper::header::{Headers, ContentType};
+    use hyper::mime::{Mime, TopLevel, SubLevel};
+
+    fn hello_world(req: &mut Request) -> IronResult<Response> {
+        let out = String::new();
+
+        let mut response = Response::with((status::Ok,
+                                           format!("
+                           <form \
+                                                    action=\"\">
+                            \
+                                                    First name:<br>
+                            \
+                                                    <input type=\"text\" name=\"firstname\"><br>
+                            \
+                                                    Last name:<br>
+                            \
+                                                    <input type=\"text\" name=\"lastname\">
+                            \
+                                                    <input type=\"submit\" value=\"Submit\">
+                                                    \
+                                                    </form>
+                           Hello \
+                                                    World: {:?}<br> headers:{}<br>",
+                                                   req.url.clone().query,
+                                                   req.headers.clone())));
+        let mut headers = Headers::new();
+
+        headers.set(ContentType(Mime(TopLevel::Text, SubLevel::Html, vec![])));
+        response.headers = headers;
+        Ok(response)
+
+    }
     #[test]
     fn it_works() {
         println!("Hello Test");
-        let app = App::run();
-        println!("{:?}", app.listener);
+        let mut router = router::Router::new();
+        router.add_controller("".to_string(), hello_world);
+        let appConfig = app_config::app_config { router: router };
+        let app = app::App::run(appConfig);
+        // println!("{:?}", app.listener);
     }
 }
