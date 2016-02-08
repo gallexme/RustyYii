@@ -9,7 +9,7 @@ fn iron_spawner(router: router::Router) -> Listening {
     // let mut router = router::Router::new();
     // router.add_route("".to_string(), hello_world);
     // router.add_route("hello".to_string(), hello_world);
-    let host = "localhost:80";
+    let host = "0.0.0.0:80";
     println!("Starting HTTP server on http://{}...", host);
     Iron::new(router).http(host).unwrap()
 
