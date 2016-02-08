@@ -17,8 +17,9 @@ impl Controller {
 }
 impl Handler for Controller {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-
-        match self.actions.get(&req.url.path.join("/")) {
+        let path = req.url.path.clone();
+        let key = path.first().unwrap();
+        match self.actions.get(key) {
             Some(handler) => handler.handle(req),
             None => Ok(Response::with(status::NotFound)),
         }
