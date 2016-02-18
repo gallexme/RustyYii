@@ -1,4 +1,5 @@
-use app::router;
+use router::Router;
+use iron::prelude::*;
 pub struct app_config {
-    pub router: router::Router,
+    pub chain: Chain,
 }

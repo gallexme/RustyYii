@@ -22,7 +22,10 @@ impl Handler for Router {
         let key = path.first().unwrap();
         match self.routes.get(key) {
             Some(handler) => handler.handle(req),
-            None => Ok(Response::with(status::NotFound)),
+            None => {
+                Ok(Response::with((status::NotFound,
+                                   format!("[Router]url: {} did not found key: {}", req.url, key))))
+            }
         }
     }
 }

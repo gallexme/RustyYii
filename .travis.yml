@@ -3,7 +3,7 @@ language: rust
 rust:
     - stable
     - nightly
-sudo: false
+sudo: true
 script:
     - cargo build
     - cargo test

@@ -1,7 +1,4 @@
 
-
-pub mod router;
-pub mod controller;
 pub mod app;
 pub mod app_config;
 

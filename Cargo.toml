@@ -6,5 +6,6 @@ authors = ["HeadScript <lostchaos3@gmail.com>"]
 [dependencies.iron]
 version = "*"
 [dependencies]
+router = "*"
 hyper = "*"
 staticfile = "*"
